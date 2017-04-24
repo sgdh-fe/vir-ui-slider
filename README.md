@@ -37,3 +37,7 @@ new Slider({
   el: '.slider'
 })
 ```
+
+## 例子
+
+[base slider](http://htmlpreview.github.io/?https://github.com/sgdh-fe/vir-ui-slider/blob/master/examples/index.html)
