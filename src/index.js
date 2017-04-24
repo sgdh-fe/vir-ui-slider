@@ -1,5 +1,4 @@
 import Vir from 'vir'
-import $ from 'jquery'
 
 export default function (options = {}) {
   return Vir({

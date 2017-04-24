@@ -6,13 +6,12 @@
  */
 
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('vir'), require('jquery')) :
-	typeof define === 'function' && define.amd ? define(['vir', 'jquery'], factory) :
-	(global.VirUiSlider = factory(global.Vir,global.jQuery));
-}(this, (function (Vir,jquery) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('vir')) :
+	typeof define === 'function' && define.amd ? define(['vir'], factory) :
+	(global.VirUiSlider = factory(global.Vir));
+}(this, (function (Vir) { 'use strict';
 
 Vir = 'default' in Vir ? Vir['default'] : Vir;
-jquery = 'default' in jquery ? jquery['default'] : jquery;
 
 var index = function () {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
