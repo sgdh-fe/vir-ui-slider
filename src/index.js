@@ -1,14 +1,21 @@
 import Vir from 'vir'
 
 export default function (options = {}) {
+  let {
+    wrapperSelector = 'ul',
+      slideSelector = 'ul > li',
+      nextSelector = '.next',
+      prevSelector = '.prev'
+  } = options
+
   return Vir({
     data: {
       index: 0,
       lock: false
     },
     events: {
-      'click->.prev': 'prev',
-      'click->.next': 'next'
+      ['click->' + nextSelector]: 'next',
+      ['click->' + prevSelector]: 'prev'
     },
     validate: {
       index() {
@@ -21,7 +28,7 @@ export default function (options = {}) {
       index(result) {
         let index = result.value
         this.set('lock', true)
-        this.$$('ul').animate({
+        this.$$(wrapperSelector).animate({
           left: index * -100 + '%'
         }, 500, () => {
           this.set('lock', false)
@@ -44,10 +51,10 @@ export default function (options = {}) {
       }
     },
     init() {
-      let len = this.$$('ul > li').length
-      this.set('len', len)
-      this.$$('ul').css('width', 100 * len + '%')
-      this.$$('ul > li').css('width', 100 / len + '%')
+      let len = this.$$(slideSelector).length
+      this.set('len', len / 1)
+      this.$$(wrapperSelector).css('width', 100 * len / 1 + '%')
+      this.$$(slideSelector).css('width', 100 / len + '%')
     }
   })
 }

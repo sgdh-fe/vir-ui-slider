@@ -1,6 +1,6 @@
 
 /*!
- * vir-ui-slider v1.0.0
+ * vir-ui-slider v1.1.0
  * (c) 2017 cjg
  * Released under the MIT License.
  */
@@ -14,17 +14,25 @@
 Vir = 'default' in Vir ? Vir['default'] : Vir;
 
 var index = function () {
+  var _events;
+
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var _options$wrapperSelec = options.wrapperSelector,
+      wrapperSelector = _options$wrapperSelec === undefined ? 'ul' : _options$wrapperSelec,
+      _options$slideSelecto = options.slideSelector,
+      slideSelector = _options$slideSelecto === undefined ? 'ul > li' : _options$slideSelecto,
+      _options$nextSelector = options.nextSelector,
+      nextSelector = _options$nextSelector === undefined ? '.next' : _options$nextSelector,
+      _options$prevSelector = options.prevSelector,
+      prevSelector = _options$prevSelector === undefined ? '.prev' : _options$prevSelector;
+
 
   return Vir({
     data: {
       index: 0,
       lock: false
     },
-    events: {
-      'click->.prev': 'prev',
-      'click->.next': 'next'
-    },
+    events: (_events = {}, _events['click->' + nextSelector] = 'next', _events['click->' + prevSelector] = 'prev', _events),
     validate: {
       index: function index() {
         if (this.get('lock')) {
@@ -38,7 +46,7 @@ var index = function () {
 
         var index = result.value;
         this.set('lock', true);
-        this.$$('ul').animate({
+        this.$$(wrapperSelector).animate({
           left: index * -100 + '%'
         }, 500, function () {
           _this.set('lock', false);
@@ -61,10 +69,10 @@ var index = function () {
       }
     },
     init: function init() {
-      var len = this.$$('ul > li').length;
-      this.set('len', len);
-      this.$$('ul').css('width', 100 * len + '%');
-      this.$$('ul > li').css('width', 100 / len + '%');
+      var len = this.$$(slideSelector).length;
+      this.set('len', len / 1);
+      this.$$(wrapperSelector).css('width', 100 * len / 1 + '%');
+      this.$$(slideSelector).css('width', 100 / len + '%');
     }
   });
 };

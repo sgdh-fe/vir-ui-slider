@@ -31,7 +31,12 @@ npm install vir-ui-slider
 ## 基本使用
 
 ```js
-const Slider = require('vir-ui-slider')()
+const Slider = require('vir-ui-slider')({
+  wrapperSelector = 'ul',
+  slideSelector = 'ul > li',
+  nextSelector = '.next',
+  prevSelector = '.prev'
+})
 
 new Slider({
   el: '.slider'
