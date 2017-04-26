@@ -29,20 +29,46 @@ npm install vir-ui-slider
 ```
 
 ## 基本使用
+```html
+  <div class="slider">
+    <ul>
+      <li>
+        <!-- lazyload 需要设置 data-src 属性 -->
+        <img data-src="n.jpg" src="n.png">
+      </li>
+      ...
+    </ul>
+    <a href="javascript:;" class="prev"></a>
+    <a href="javascript:;" class="next"></a>
+  </div>
+```
 
 ```js
-const Slider = require('vir-ui-slider')({
-  wrapperSelector = 'ul',
-  slideSelector = 'ul > li',
-  nextSelector = '.next',
-  prevSelector = '.prev'
-})
+const Slider = require('vir-ui-slider')(
+  /* 默认选项
+    {
+      lazyload: false,
+      wrapperSelector: 'ul',
+      slideSelector: 'ul > li',
+      nextSelector: '.next',
+      prevSelector: '.prev'
+    }
+  */
+)
 
-new Slider({
+let slider = new Slider({
   el: '.slider'
 })
+/* 选项 lazyload 为 true 需要手触发首屏显示
+slider.set('index', 0, {
+  force: true
+})
+*/
 ```
 
 ## 例子
 
-[base slider](http://htmlpreview.github.io/?https://github.com/sgdh-fe/vir-ui-slider/blob/master/examples/index.html)
+<a href="https://codepen.io/cjg/pen/KmNoJY/" target="_blank">code pen</a>
+
+<a href="http://htmlpreview.github.io/?https://github.com/sgdh-fe/vir-ui-slider/blob/master/examples/index.html" target="_blank">base</a>
+

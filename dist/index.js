@@ -1,6 +1,6 @@
 
 /*!
- * vir-ui-slider v1.1.0
+ * vir-ui-slider v1.2.0
  * (c) 2017 cjg
  * Released under the MIT License.
  */
@@ -17,7 +17,9 @@ var index = function () {
   var _events;
 
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var _options$wrapperSelec = options.wrapperSelector,
+  var _options$lazyload = options.lazyload,
+      lazyload = _options$lazyload === undefined ? false : _options$lazyload,
+      _options$wrapperSelec = options.wrapperSelector,
       wrapperSelector = _options$wrapperSelec === undefined ? 'ul' : _options$wrapperSelec,
       _options$slideSelecto = options.slideSelector,
       slideSelector = _options$slideSelecto === undefined ? 'ul > li' : _options$slideSelecto,
@@ -30,7 +32,8 @@ var index = function () {
   return Vir({
     data: {
       index: 0,
-      lock: false
+      lock: false,
+      state: {}
     },
     events: (_events = {}, _events['click->' + nextSelector] = 'next', _events['click->' + prevSelector] = 'prev', _events),
     validate: {
@@ -46,6 +49,9 @@ var index = function () {
 
         var index = result.value;
         this.set('lock', true);
+        if (lazyload) {
+          this.lazyload(index);
+        }
         this.$$(wrapperSelector).animate({
           left: index * -100 + '%'
         }, 500, function () {
@@ -56,7 +62,7 @@ var index = function () {
     methods: {
       index: function index(_index) {
         var len = this.get('len');
-        return _index < 0 ? len - 1 : _index >= len ? 0 : _index;
+        return _index < 0 ? len - 1 : _index % len;
       },
       run: function run(index) {
         this.set('index', this.index(index));
@@ -66,6 +72,21 @@ var index = function () {
       },
       next: function next() {
         this.run(this.get('index') + 1);
+      },
+      getState: function getState(index) {
+        var state = this.get('state');
+        if (state[index]) {
+          return true;
+        }
+        state[index] = true;
+        this.set('state', state);
+      },
+      lazyload: function lazyload(index) {
+        if (this.getState(index)) {
+          return;
+        }
+        var $el = this.$$(slideSelector).eq(index).find('img[data-src]');
+        $el.attr('src', $el.attr('data-src'));
       }
     },
     init: function init() {

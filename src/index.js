@@ -2,7 +2,8 @@ import Vir from 'vir'
 
 export default function (options = {}) {
   let {
-    wrapperSelector = 'ul',
+    lazyload = false,
+      wrapperSelector = 'ul',
       slideSelector = 'ul > li',
       nextSelector = '.next',
       prevSelector = '.prev'
@@ -11,7 +12,8 @@ export default function (options = {}) {
   return Vir({
     data: {
       index: 0,
-      lock: false
+      lock: false,
+      state: {}
     },
     events: {
       ['click->' + nextSelector]: 'next',
@@ -28,6 +30,9 @@ export default function (options = {}) {
       index(result) {
         let index = result.value
         this.set('lock', true)
+        if (lazyload) {
+          this.lazyload(index)
+        }
         this.$$(wrapperSelector).animate({
           left: index * -100 + '%'
         }, 500, () => {
@@ -38,7 +43,7 @@ export default function (options = {}) {
     methods: {
       index(index) {
         let len = this.get('len')
-        return index < 0 ? (len - 1) : (index >= len ? 0 : index)
+        return index < 0 ? len - 1 : index % len
       },
       run(index) {
         this.set('index', this.index(index))
@@ -48,6 +53,21 @@ export default function (options = {}) {
       },
       next() {
         this.run(this.get('index') + 1)
+      },
+      getState(index) {
+        let state = this.get('state')
+        if (state[index]) {
+          return true
+        }
+        state[index] = true
+        this.set('state', state)
+      },
+      lazyload(index) {
+        if (this.getState(index)) {
+          return
+        }
+        let $el = this.$$(slideSelector).eq(index).find('img[data-src]')
+        $el.attr('src', $el.attr('data-src'))
       }
     },
     init() {
