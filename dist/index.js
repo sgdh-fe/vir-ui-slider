@@ -1,17 +1,69 @@
 
 /*!
- * vir-ui-slider v1.2.0
+ * vir-ui-slider v1.3.0
  * (c) 2017 cjg
  * Released under the MIT License.
  */
 
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('vir')) :
-	typeof define === 'function' && define.amd ? define(['vir'], factory) :
-	(global.VirUiSlider = factory(global.Vir));
-}(this, (function (Vir) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('vir'), require('jquery')) :
+	typeof define === 'function' && define.amd ? define(['vir', 'jquery'], factory) :
+	(global.VirUiSlider = factory(global.Vir,global.jQuery));
+}(this, (function (Vir,$) { 'use strict';
 
 Vir = 'default' in Vir ? Vir['default'] : Vir;
+$ = 'default' in $ ? $['default'] : $;
+
+var initPagination = function (options) {
+  var _events;
+
+  var App = Vir();
+  var ctx = this;
+
+  var selector = options.selector,
+      _options$navSelector = options.navSelector,
+      navSelector = _options$navSelector === undefined ? 'li' : _options$navSelector,
+      _options$currentClass = options.currentClass,
+      currentClass = _options$currentClass === undefined ? 'cur' : _options$currentClass;
+
+
+  var app = new App({
+    data: {
+      lock: false,
+      index: 0
+    },
+    el: selector,
+    events: (_events = {}, _events['mouseenter->' + navSelector] = 'enter', _events['mouseleave->' + navSelector] = 'leave', _events),
+    watch: {
+      index: function index(result) {
+        var old = result.old;
+        var index = result.value;
+        this.$$(navSelector).eq(old).removeClass(currentClass);
+        this.$$(navSelector).eq(index).addClass(currentClass);
+      }
+    },
+    methods: {
+      enter: function enter(event) {
+        var _this = this;
+
+        var $el = $(event.currentTarget);
+        var index = $el.attr('data-index') || $el.index();
+        this.set('t', setTimeout(function () {
+          ctx.set('index', index);
+          _this.set('index', index);
+        }, 200));
+      },
+      leave: function leave() {
+        clearTimeout(this.get('t'));
+      }
+    }
+  });
+
+  // 双向
+  ctx.$watch('index', function (result) {
+    app.set('index', result.value);
+  });
+};
 
 var index = function () {
   var _events;
@@ -26,7 +78,9 @@ var index = function () {
       _options$nextSelector = options.nextSelector,
       nextSelector = _options$nextSelector === undefined ? '.next' : _options$nextSelector,
       _options$prevSelector = options.prevSelector,
-      prevSelector = _options$prevSelector === undefined ? '.prev' : _options$prevSelector;
+      prevSelector = _options$prevSelector === undefined ? '.prev' : _options$prevSelector,
+      _options$pagination = options.pagination,
+      pagination = _options$pagination === undefined ? {} : _options$pagination;
 
 
   return Vir({
@@ -94,6 +148,10 @@ var index = function () {
       this.set('len', len / 1);
       this.$$(wrapperSelector).css('width', 100 * len / 1 + '%');
       this.$$(slideSelector).css('width', 100 / len + '%');
+
+      if (pagination.selector) {
+        initPagination.call(this, pagination);
+      }
     }
   });
 };

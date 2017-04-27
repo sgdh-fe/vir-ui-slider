@@ -1,7 +1,10 @@
 var Slider = VirUiSlider({
   lazyload: true,
   wrapperSelector: '.a',
-  slideSelector: '.a > li'
+  slideSelector: '.a > li',
+  pagination: {
+    selector: '.pagination'
+  }
 })
 var slider = new Slider({
   el: '.slider'

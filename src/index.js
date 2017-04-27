@@ -1,4 +1,5 @@
 import Vir from 'vir'
+import initPagination from './pagination'
 
 export default function (options = {}) {
   let {
@@ -6,7 +7,8 @@ export default function (options = {}) {
       wrapperSelector = 'ul',
       slideSelector = 'ul > li',
       nextSelector = '.next',
-      prevSelector = '.prev'
+      prevSelector = '.prev',
+      pagination = {}
   } = options
 
   return Vir({
@@ -75,6 +77,10 @@ export default function (options = {}) {
       this.set('len', len / 1)
       this.$$(wrapperSelector).css('width', 100 * len / 1 + '%')
       this.$$(slideSelector).css('width', 100 / len + '%')
+
+      if (pagination.selector) {
+        initPagination.call(this, pagination)
+      }
     }
   })
 }

@@ -51,7 +51,12 @@ const Slider = require('vir-ui-slider')(
       wrapperSelector: 'ul',
       slideSelector: 'ul > li',
       nextSelector: '.next',
-      prevSelector: '.prev'
+      prevSelector: '.prev',
+      pagination: {
+        selector:'.pagination', // 传值开启 pagination 功能 不依赖结构
+        navSelector: 'li',
+        currentClass: 'cur'
+      }
     }
   */
 )
@@ -71,4 +76,3 @@ slider.set('index', 0, {
 <a href="https://codepen.io/cjg/pen/KmNoJY/" target="_blank">code pen</a>
 
 <a href="http://htmlpreview.github.io/?https://github.com/sgdh-fe/vir-ui-slider/blob/master/examples/index.html" target="_blank">base</a>
-

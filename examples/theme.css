@@ -71,3 +71,24 @@ li {
 .slider ol li.cur {
   background-color: rgba(240, 255, 11, 0.8);
 }
+
+.pagination {
+  text-align: center
+}
+
+.pagination ul {
+  display: inline-block
+}
+
+.pagination li {
+  float: left;
+  width: 20px;
+  height: 20px;
+  margin: 20px;
+  border-radius: 10px;
+  background-color: #666
+}
+
+.pagination li.cur {
+  background-color: red
+}
